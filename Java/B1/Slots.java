@@ -1,0 +1,151 @@
+package B1;
+
+
+import Media.*;
+import BasicIO.*;
+import java.awt.*;
+import static BasicIO.Formats.*;
+import static java.lang.Math.*;
+import static java.awt.Color.*;
+
+
+public class Slots {
+  
+  
+  private BasicForm display;     // form for user 
+  
+  
+  /** The constructor creates and displays the color swatch.                   */
+  
+  public Slots ( ) {
+    
+    int button;
+    int balance = 50;
+    
+    for( ; ; ){
+      
+      display = new BasicForm("Play","Quit");
+      setUpForm();
+      button = display.accept();
+      
+      
+      for( ; ; ){
+        
+        int c1 = (int)(Math.random()*9);
+        int c2 = (int)(Math.random()*9);
+        int c3 = (int)(Math.random()*9);
+        
+        fillForm( c1, c2, c3, balance );
+        
+        if(button == 0){
+          
+          int bet;
+          int pay;
+          
+          fillForm( c1, c2, c3, balance );
+          
+          
+          if(match(c1,c2,c3) == 2){
+            
+            bet = display.readInt("bet");
+            
+            pay = bet * 3;
+            display.writeInt("payout",pay);
+            
+            balance = balance + pay;
+            display.writeInt("balance",balance);
+            
+            button=display.accept();
+          }
+          
+          
+          
+          else if(match(c1,c2,c3) == 3){
+            
+            bet = display.readInt("bet");
+            
+            pay = bet * 5;
+            display.writeInt("payout",pay);
+            
+            balance = balance + pay;
+            display.writeInt("balance",balance);
+            
+            button=display.accept();
+          }
+          
+          
+          else if(match(c1,c2,c3) == 0){
+            
+            bet = display.readInt("bet");
+            
+            pay = bet * 1;
+            display.writeInt("payout",pay);
+            
+            balance = balance - bet;
+            display.writeInt("balance",balance);
+            
+            button=display.accept();
+          }
+          
+          
+          break;
+        }
+        else if( button == 1) break;
+      }
+      
+      display.close();
+      if( button == 1) break;
+    }
+    
+    
+  };  // constructor
+  
+  private void setUpForm(){
+    
+    display.addTextField("c1","c1",2,100,10);
+    display.setEditable("c1",false);
+    
+    display.addTextField("c2","c2",2,200,10);
+    display.setEditable("c2",false);
+    
+    display.addTextField("c3","c3",2,300,10);
+    display.setEditable("c3",false);
+    
+    display.addTextField("matches","matches",2,150,50);
+    display.setEditable("matches",false);
+    
+    display.addTextField("bet","bet",getCurrencyInstance(),10,10,100);
+    
+    display.addTextField("payout","payout",getCurrencyInstance(),10,125,100);
+    display.setEditable("payout",false); 
+    
+    display.addTextField("balance","balance",getCurrencyInstance(),10,250,100);
+    display.setEditable("balance",false); 
+  }
+  
+  private void fillForm(int c1, int c2, int c3, int balance){
+    
+    
+    display.writeInt("c1",c1);
+    display.writeInt("c2",c2);
+    display.writeInt("c3",c3);
+    display.writeInt("matches",match(c1,c2,c3));
+    display.writeInt("balance",balance);
+  }
+  
+  private int match(int c1, int c2, int c3){
+    
+    if (c1 == c2) return 2;
+    if (c1 == c3) return 2;
+    if (c2 == c1) return 2;
+    if (c2 == c3) return 2;
+    if (c3 == c1) return 2;
+    if (c3 == c2) return 2;
+    if (c1 == c2 && c2 == c3) return 3;
+    else return 0;
+  }
+  
+  
+  public static void main ( String[] args ) { Slots p = new Slots(); };
+  
+}  // Slots
